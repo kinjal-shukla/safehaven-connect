@@ -3,17 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Shield, Zap, BookOpen, PhoneCall } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import logo from "@/assets/safeshe-logo.png";
-
-const userIcon = new L.DivIcon({
-  className: "",
-  html: `<div style="width:16px;height:16px;border-radius:50%;background:hsl(340,82%,55%);border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>`,
-  iconSize: [16, 16],
-  iconAnchor: [8, 8],
-});
 
 const quickActions = [
   { icon: Phone, label: "Contacts", path: "/contacts", color: "bg-accent" },
@@ -26,16 +16,18 @@ const quickActions = [
 
 const HomeScreen = () => {
   const navigate = useNavigate();
-  const [position, setPosition] = useState<[number, number]>([12.9716, 77.5946]);
+  const [position, setPosition] = useState<{ lat: number; lng: number }>({ lat: 12.9716, lng: 77.5946 });
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => setPosition([pos.coords.latitude, pos.coords.longitude]),
-        () => {} // keep default
+        (pos) => setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => {}
       );
     }
   }, []);
+
+  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${position.lng - 0.02}%2C${position.lat - 0.012}%2C${position.lng + 0.02}%2C${position.lat + 0.012}&layer=mapnik&marker=${position.lat}%2C${position.lng}`;
 
   return (
     <MobileLayout>
@@ -84,31 +76,13 @@ const HomeScreen = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="h-36 relative">
-            <MapContainer
-              center={position}
-              zoom={14}
-              className="h-full w-full"
-              zoomControl={false}
-              attributionControl={false}
-              dragging={false}
-              scrollWheelZoom={false}
-              doubleClickZoom={false}
-              touchZoom={false}
-            >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <Marker position={position} icon={userIcon} />
-              <Circle
-                center={position}
-                radius={150}
-                pathOptions={{
-                  color: "hsl(340, 82%, 55%)",
-                  fillColor: "hsl(340, 82%, 55%)",
-                  fillOpacity: 0.08,
-                  weight: 1,
-                }}
-              />
-            </MapContainer>
+          <div className="h-36 relative overflow-hidden rounded-t-2xl">
+            <iframe
+              src={mapUrl}
+              className="w-full h-full border-0"
+              title="Location Preview"
+              loading="lazy"
+            />
           </div>
           <button
             onClick={() => navigate("/live-tracking")}
