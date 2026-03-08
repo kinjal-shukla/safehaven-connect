@@ -26,6 +26,8 @@ import EditProfileScreen from "./pages/EditProfileScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 import NotificationSettingsScreen from "./pages/NotificationSettingsScreen";
 import PrivacySettingsScreen from "./pages/PrivacySettingsScreen";
+import NotificationsScreen from "./pages/NotificationsScreen";
+import AISupportChatScreen from "./pages/AISupportChatScreen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
