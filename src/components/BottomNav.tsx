@@ -1,4 +1,4 @@
-import { Home, Bell, Heart, User, Settings } from "lucide-react";
+import { Home, Bell, Heart, User, Settings, BellDot } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
