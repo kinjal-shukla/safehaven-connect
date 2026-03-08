@@ -99,7 +99,7 @@ const LiveTrackingScreen = () => {
         </div>
 
         {/* Bottom panel */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 bg-card rounded-t-3xl p-5 shadow-elevated">
+        <div className="absolute bottom-0 left-0 right-0 z-[1000] bg-card rounded-t-3xl p-5 shadow-elevated">
           <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
 
           {/* Status */}
