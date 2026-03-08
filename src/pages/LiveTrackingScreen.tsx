@@ -2,47 +2,28 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Share2, Navigation } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
-import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-// Custom pink marker icon
-const userIcon = new L.DivIcon({
-  className: "",
-  html: `<div style="width:20px;height:20px;border-radius:50%;background:hsl(340,82%,55%);border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-});
-
-function RecenterMap({ lat, lng }: { lat: number; lng: number }) {
-  const map = useMap();
-  useEffect(() => {
-    map.setView([lat, lng], 15);
-  }, [lat, lng, map]);
-  return null;
-}
 
 const LiveTrackingScreen = () => {
   const navigate = useNavigate();
-  const [position, setPosition] = useState<[number, number]>([12.9716, 77.5946]); // Default: Bangalore
+  const [position, setPosition] = useState<{ lat: number; lng: number }>({ lat: 12.9716, lng: 77.5946 });
   const [locationName, setLocationName] = useState("Fetching location...");
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setPosition([pos.coords.latitude, pos.coords.longitude]);
+          setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
           setLocationName("Your current location");
         },
-        () => {
-          setLocationName("Bangalore, India (default)");
-        }
+        () => setLocationName("Bangalore, India (default)")
       );
     }
   }, []);
 
+  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${position.lng - 0.015}%2C${position.lat - 0.01}%2C${position.lng + 0.015}%2C${position.lat + 0.01}&layer=mapnik&marker=${position.lat}%2C${position.lng}`;
+
   const handleShare = () => {
-    const url = `https://www.google.com/maps?q=${position[0]},${position[1]}`;
+    const url = `https://www.google.com/maps?q=${position.lat},${position.lng}`;
     if (navigator.share) {
       navigator.share({ title: "My Live Location", text: "Here's my live location", url });
     } else {
@@ -54,14 +35,14 @@ const LiveTrackingScreen = () => {
     <MobileLayout showNav={false}>
       <div className="relative h-screen flex flex-col">
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-[1000] flex items-center justify-between px-4 py-4">
+        <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-4">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-foreground" />
           </button>
-          <h1 className="font-display font-700 text-foreground bg-card/80 px-3 py-1 rounded-full text-sm shadow-elevated">
+          <h1 className="font-display font-700 text-foreground bg-card/90 px-3 py-1 rounded-full text-sm shadow-elevated">
             Live Tracking
           </h1>
           <button
@@ -74,31 +55,16 @@ const LiveTrackingScreen = () => {
 
         {/* Map */}
         <div className="flex-1">
-          <MapContainer
-            center={position}
-            zoom={15}
-            className="h-full w-full"
-            zoomControl={false}
-            attributionControl={false}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={position} icon={userIcon} />
-            <Circle
-              center={position}
-              radius={200}
-              pathOptions={{
-                color: "hsl(340, 82%, 55%)",
-                fillColor: "hsl(340, 82%, 55%)",
-                fillOpacity: 0.1,
-                weight: 2,
-              }}
-            />
-            <RecenterMap lat={position[0]} lng={position[1]} />
-          </MapContainer>
+          <iframe
+            src={mapUrl}
+            className="w-full h-full border-0"
+            title="Live Location Map"
+            loading="lazy"
+          />
         </div>
 
         {/* Bottom panel */}
-        <div className="absolute bottom-0 left-0 right-0 z-[1000] bg-card rounded-t-3xl p-6 shadow-elevated">
+        <div className="absolute bottom-0 left-0 right-0 z-20 bg-card rounded-t-3xl p-6 shadow-elevated">
           <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center">
