@@ -82,7 +82,7 @@ const LiveTrackingScreen = () => {
           >
             <ArrowLeft className="w-5 h-5 text-foreground" />
           </button>
-          <h1 className="font-display font-700 text-foreground bg-card/90 px-3 py-1 rounded-full text-sm shadow-elevated">
+          <h1 className="font-display font-700 text-foreground bg-card/90 px-3 py-1 rounded-full text-sm shadow-elevated pointer-events-auto">
             Live Tracking
           </h1>
           <div className="w-10" />
