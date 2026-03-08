@@ -26,6 +26,8 @@ import EditProfileScreen from "./pages/EditProfileScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 import NotificationSettingsScreen from "./pages/NotificationSettingsScreen";
 import PrivacySettingsScreen from "./pages/PrivacySettingsScreen";
+import NotificationsScreen from "./pages/NotificationsScreen";
+import AISupportChatScreen from "./pages/AISupportChatScreen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const App = () => (
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="/notification-settings" element={<NotificationSettingsScreen />} />
           <Route path="/privacy-settings" element={<PrivacySettingsScreen />} />
+          <Route path="/notifications" element={<NotificationsScreen />} />
+          <Route path="/ai-support" element={<AISupportChatScreen />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

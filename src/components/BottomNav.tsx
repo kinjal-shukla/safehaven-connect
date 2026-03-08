@@ -1,10 +1,10 @@
-import { Home, Bell, Heart, User, Settings } from "lucide-react";
+import { Home, BellDot, Heart, User, Settings } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/home" },
-  { icon: Bell, label: "Alerts", path: "/alerts" },
+  { icon: BellDot, label: "Notifications", path: "/notifications" },
   { icon: Heart, label: "Support", path: "/support" },
   { icon: User, label: "Profile", path: "/profile" },
   { icon: Settings, label: "Settings", path: "/settings" },
