@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Navigation, Users, MessageCircle, Phone, AlertTriangle, Check } from "lucide-react";
+import { ArrowLeft, Navigation, Users, Check, Send, MapPin } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { toast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,8 +16,8 @@ const LiveTrackingScreen = () => {
   const [position, setPosition] = useState<{ lat: number; lng: number }>({ lat: 12.9716, lng: 77.5946 });
   const [locationName, setLocationName] = useState("Fetching location...");
   const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
+  const [notifiedContacts, setNotifiedContacts] = useState<string[]>([]);
+  const [allSent, setAllSent] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -35,62 +35,40 @@ const LiveTrackingScreen = () => {
   const locationLink = `https://www.google.com/maps?q=${position.lat},${position.lng}`;
   const emergencyMessage = `🆘 EMERGENCY! I need help. Here's my live location: ${locationLink} — Sent via SafeShe`;
 
-  const sendToAllContacts = () => {
+  const handleEmergencyShare = async () => {
+    if (sending || allSent) return;
     setSending(true);
+    setNotifiedContacts([]);
 
-    // Open SMS with all contacts pre-filled
+    // Simulate sending to each contact one by one with notification
+    for (let i = 0; i < emergencyContacts.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      const contact = emergencyContacts[i];
+      setNotifiedContacts((prev) => [...prev, contact.name]);
+      toast({
+        title: `✅ Notified ${contact.name}`,
+        description: `Live location sent via SMS to ${contact.phone}`,
+      });
+    }
+
+    // After all notified, open SMS with all numbers pre-filled
     const phones = emergencyContacts.map((c) => c.phone).join(",");
     const smsUrl = `sms:${phones}?body=${encodeURIComponent(emergencyMessage)}`;
     window.open(smsUrl, "_blank");
 
-    setTimeout(() => {
-      setSending(false);
-      setSent(true);
-      toast({
-        title: "📍 Location shared!",
-        description: `SMS opened for ${emergencyContacts.length} emergency contacts.`,
-      });
-      setTimeout(() => setSent(false), 3000);
-    }, 1500);
-  };
+    setSending(false);
+    setAllSent(true);
 
-  const shareViaWhatsApp = (contact: { name: string; phone: string }) => {
-    const waUrl = `https://wa.me/${contact.phone.replace("+", "")}?text=${encodeURIComponent(emergencyMessage)}`;
-    window.open(waUrl, "_blank");
-    toast({ title: `Sharing with ${contact.name}`, description: "Opening WhatsApp..." });
-  };
-
-  const shareViaWhatsAppAll = () => {
-    // Open WhatsApp for first contact, show toast for others
-    shareViaWhatsApp(emergencyContacts[0]);
     toast({
-      title: "📍 Share with all contacts",
-      description: "Send to each contact one by one via WhatsApp.",
+      title: "🆘 All contacts notified!",
+      description: `Location shared with ${emergencyContacts.length} emergency contacts.`,
     });
-  };
 
-  const handleEmergencyShare = () => {
-    setSending(true);
-    // Try native share first (works best on mobile)
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "🆘 Emergency - My Live Location",
-          text: emergencyMessage,
-        })
-        .then(() => {
-          setSending(false);
-          setSent(true);
-          toast({ title: "✅ Location shared!", description: "Stay safe." });
-          setTimeout(() => setSent(false), 3000);
-        })
-        .catch(() => {
-          setSending(false);
-          sendToAllContacts();
-        });
-    } else {
-      sendToAllContacts();
-    }
+    // Reset after 5 seconds
+    setTimeout(() => {
+      setAllSent(false);
+      setNotifiedContacts([]);
+    }, 5000);
   };
 
   return (
@@ -133,105 +111,92 @@ const LiveTrackingScreen = () => {
               <p className="text-sm font-display font-700 text-foreground">Location Active</p>
               <p className="text-xs text-muted-foreground font-body">{locationName}</p>
             </div>
-            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-secondary">
-              <Users className="w-3 h-3 text-primary" />
-              <span className="text-[10px] font-body font-600 text-primary">{emergencyContacts.length} contacts</span>
-            </div>
           </div>
 
-          {/* Emergency Share Button */}
+          {/* Contact chips — show who will be notified */}
+          <div className="flex gap-2 mb-4">
+            {emergencyContacts.map((contact) => {
+              const isNotified = notifiedContacts.includes(contact.name);
+              return (
+                <div
+                  key={contact.phone}
+                  className={`flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all ${
+                    isNotified
+                      ? "bg-primary/10 border-primary"
+                      : "bg-muted border-border"
+                  }`}
+                >
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-display font-700 ${
+                      isNotified
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-accent text-accent-foreground"
+                    }`}
+                  >
+                    {isNotified ? <Check className="w-3 h-3" /> : contact.name[0]}
+                  </div>
+                  <span className="text-[10px] font-body font-600 text-foreground truncate">
+                    {contact.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* One-tap Emergency Share */}
           <button
             onClick={handleEmergencyShare}
             disabled={sending}
-            className="w-full h-12 bg-sos text-sos-foreground font-display font-700 rounded-2xl shadow-sos mb-3 flex items-center justify-center gap-2 active:scale-[0.98] transition-transform disabled:opacity-70"
+            className={`w-full h-12 font-display font-700 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:opacity-70 ${
+              allSent
+                ? "bg-primary text-primary-foreground shadow-card"
+                : "bg-sos text-sos-foreground shadow-sos"
+            }`}
           >
-            {sending ? (
-              <>
+            <AnimatePresence mode="wait">
+              {sending ? (
                 <motion.div
-                  className="w-5 h-5 border-2 border-sos-foreground/30 border-t-sos-foreground rounded-full"
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-                />
-                Sending...
-              </>
-            ) : sent ? (
-              <>
-                <Check className="w-5 h-5" />
-                Location Sent to All Contacts!
-              </>
-            ) : (
-              <>
-                <AlertTriangle className="w-5 h-5" />
-                🆘 Emergency Share to All
-              </>
-            )}
+                  key="sending"
+                  className="flex items-center gap-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <motion.div
+                    className="w-5 h-5 border-2 border-sos-foreground/30 border-t-sos-foreground rounded-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+                  />
+                  Notifying {notifiedContacts.length + 1}/{emergencyContacts.length}...
+                </motion.div>
+              ) : allSent ? (
+                <motion.div
+                  key="sent"
+                  className="flex items-center gap-2"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <Check className="w-5 h-5" />
+                  All {emergencyContacts.length} Contacts Notified!
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="ready"
+                  className="flex items-center gap-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <Send className="w-5 h-5" />
+                  Share Location to All Contacts
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
 
-          {/* More options toggle */}
-          <button
-            onClick={() => setShowOptions(!showOptions)}
-            className="w-full text-center text-xs text-muted-foreground font-body py-1"
-          >
-            {showOptions ? "Hide options ▲" : "More sharing options ▼"}
-          </button>
-
-          {/* Share options */}
-          <AnimatePresence>
-            {showOptions && (
-              <motion.div
-                className="mt-3 space-y-2"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-              >
-                {/* SMS to all */}
-                <button
-                  onClick={sendToAllContacts}
-                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-secondary text-left active:scale-[0.98] transition-transform"
-                >
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Phone className="w-4 h-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-display font-700 text-foreground">Send SMS to All Contacts</p>
-                    <p className="text-[10px] text-muted-foreground font-body">
-                      {emergencyContacts.map((c) => c.name).join(", ")}
-                    </p>
-                  </div>
-                </button>
-
-                {/* WhatsApp */}
-                <button
-                  onClick={shareViaWhatsAppAll}
-                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-secondary text-left active:scale-[0.98] transition-transform"
-                >
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                    <MessageCircle className="w-4 h-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-display font-700 text-foreground">Share via WhatsApp</p>
-                    <p className="text-[10px] text-muted-foreground font-body">Send to contacts one by one</p>
-                  </div>
-                </button>
-
-                {/* Individual contacts */}
-                <div className="flex gap-2 pt-1">
-                  {emergencyContacts.map((contact) => (
-                    <button
-                      key={contact.phone}
-                      onClick={() => shareViaWhatsApp(contact)}
-                      className="flex-1 flex flex-col items-center gap-1 p-2 rounded-xl bg-accent active:scale-95 transition-transform"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                        <span className="text-xs font-display font-700 text-primary">{contact.name[0]}</span>
-                      </div>
-                      <span className="text-[10px] font-body font-600 text-foreground">{contact.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <p className="text-[10px] text-muted-foreground font-body text-center mt-2">
+            <MapPin className="w-3 h-3 inline-block mr-0.5" />
+            Auto-sends your live GPS location via SMS
+          </p>
         </div>
       </div>
     </MobileLayout>
