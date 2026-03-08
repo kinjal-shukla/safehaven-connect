@@ -75,7 +75,7 @@ const LiveTrackingScreen = () => {
     <MobileLayout showNav={false}>
       <div className="relative h-screen flex flex-col">
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-4">
+        <div className="absolute top-0 left-0 right-0 z-[1000] flex items-center justify-between px-4 py-4 pointer-events-none">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center"
