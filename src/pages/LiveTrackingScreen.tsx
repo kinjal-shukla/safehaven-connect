@@ -77,7 +77,7 @@ const LiveTrackingScreen = () => {
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 z-[1000] flex items-center justify-between px-4 py-4 pointer-events-none">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/home")}
             className="w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center pointer-events-auto"
           >
             <ArrowLeft className="w-5 h-5 text-foreground" />
