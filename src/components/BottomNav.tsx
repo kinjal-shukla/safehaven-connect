@@ -23,20 +23,20 @@ const BottomNav = () => {
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors"
+              className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors z-10"
             >
               {isActive && (
                 <motion.div
                   layoutId="bottomnav-indicator"
-                  className="absolute inset-0 gradient-primary rounded-xl opacity-10"
+                  className="absolute inset-0 bg-primary/10 rounded-xl"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
               <item.icon
-                className={`w-5 h-5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}
+                className={`relative z-10 w-5 h-5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}
               />
               <span
-                className={`text-[10px] font-semibold transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}
+                className={`relative z-10 text-[10px] font-semibold transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}
               >
                 {item.label}
               </span>
