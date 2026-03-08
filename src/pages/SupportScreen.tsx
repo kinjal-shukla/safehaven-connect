@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Heart, Phone, Sparkles } from "lucide-react";
+import { Heart, Phone, Sparkles, Bot } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { motion } from "framer-motion";
 
