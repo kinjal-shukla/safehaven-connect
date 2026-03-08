@@ -75,14 +75,14 @@ const LiveTrackingScreen = () => {
     <MobileLayout showNav={false}>
       <div className="relative h-screen flex flex-col">
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-4">
+        <div className="absolute top-0 left-0 right-0 z-[1000] flex items-center justify-between px-4 py-4 pointer-events-none">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center pointer-events-auto"
           >
             <ArrowLeft className="w-5 h-5 text-foreground" />
           </button>
-          <h1 className="font-display font-700 text-foreground bg-card/90 px-3 py-1 rounded-full text-sm shadow-elevated">
+          <h1 className="font-display font-700 text-foreground bg-card/90 px-3 py-1 rounded-full text-sm shadow-elevated pointer-events-auto">
             Live Tracking
           </h1>
           <div className="w-10" />
@@ -99,7 +99,7 @@ const LiveTrackingScreen = () => {
         </div>
 
         {/* Bottom panel */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 bg-card rounded-t-3xl p-5 shadow-elevated">
+        <div className="absolute bottom-0 left-0 right-0 z-[1000] bg-card rounded-t-3xl p-5 shadow-elevated">
           <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
 
           {/* Status */}
