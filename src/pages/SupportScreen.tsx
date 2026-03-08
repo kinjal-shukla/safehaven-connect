@@ -27,6 +27,22 @@ const SupportScreen = () => {
 
         <div className="space-y-3">
           <motion.button
+            onClick={() => navigate("/ai-support")}
+            className="w-full flex items-center gap-4 p-5 rounded-2xl bg-card border border-primary/20 shadow-card text-left"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+          >
+            <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center">
+              <Bot className="w-6 h-6 text-primary-foreground" />
+            </div>
+            <div>
+              <p className="text-sm font-display font-700 text-foreground">AI Support Chat</p>
+              <p className="text-xs text-muted-foreground font-body">Anonymous • Confidential • 24/7</p>
+            </div>
+          </motion.button>
+
+          <motion.button
             onClick={() => navigate("/motivational")}
             className="w-full flex items-center gap-4 p-5 rounded-2xl bg-card border border-border shadow-card text-left"
             initial={{ opacity: 0, y: 10 }}
