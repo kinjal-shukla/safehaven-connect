@@ -9,7 +9,8 @@ import logo from "@/assets/safeshe-logo.png";
 const LoginScreen = () => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
+  const [countryCode] = useState("+91");
+  const [focused, setFocused] = useState(false);
 
   const handleSendOTP = () => {
     if (phone.length >= 10) {
@@ -19,62 +20,74 @@ const LoginScreen = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-primary/8 blur-3xl" />
-      <div className="absolute top-1/2 -left-24 w-48 h-48 rounded-full bg-accent/30 blur-3xl" />
+      {/* Ambient light */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[200px] rounded-full bg-primary/6 blur-[80px]" />
 
-      <div className="flex-1 flex flex-col px-8 py-10 relative z-10">
-        {/* Back button */}
+      <div className="flex-1 flex flex-col px-6 pt-6 relative z-10">
+        {/* Nav */}
         <motion.button
           onClick={() => navigate("/welcome")}
-          className="w-10 h-10 rounded-xl glass flex items-center justify-center shadow-card mb-6"
-          initial={{ opacity: 0, x: -10 }}
+          className="w-10 h-10 rounded-xl bg-card shadow-card border border-border/50 flex items-center justify-center mb-10"
+          initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <ArrowLeft className="w-5 h-5 text-foreground" />
+          <ArrowLeft className="w-[18px] h-[18px] text-foreground" />
         </motion.button>
 
         {/* Logo */}
         <motion.div
-          className="flex items-center justify-center mb-10"
-          initial={{ opacity: 0, scale: 0.8 }}
+          className="flex justify-center mb-10"
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring" }}
+          transition={{ delay: 0.1 }}
         >
           <div className="relative">
-            <div className="absolute inset-0 rounded-full bg-primary/15 blur-2xl scale-150" />
-            <img src={logo} alt="SafeShe" className="w-16 h-16 relative z-10 drop-shadow-lg" />
+            <div className="absolute inset-[-12px] rounded-full bg-primary/10 blur-xl" />
+            <img src={logo} alt="SafeShe" className="w-14 h-14 relative z-10" />
           </div>
         </motion.div>
 
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.15 }}
+          className="mb-8"
         >
-          <h1 className="text-2xl font-display font-900 text-foreground mb-2 tracking-tight">Welcome Back</h1>
-          <p className="text-muted-foreground text-sm mb-8 font-body">Enter your phone number to continue</p>
+          <h1 className="text-[26px] font-display font-900 text-foreground tracking-tight">
+            Welcome back
+          </h1>
+          <p className="text-muted-foreground text-[14px] mt-1 font-body font-500">
+            Enter your phone number to continue
+          </p>
         </motion.div>
 
+        {/* Phone input — Instagram-style clean field */}
         <motion.div
-          className="space-y-4"
-          initial={{ opacity: 0, y: 15 }}
+          className="space-y-5"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.25 }}
         >
-          <div className="flex gap-3">
-            <button className="flex items-center gap-1 px-4 h-12 rounded-xl glass shadow-card text-foreground font-body font-600 text-sm">
-              {countryCode}
-              <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          <div
+            className={`flex items-center gap-0 rounded-2xl border-2 transition-all duration-200 bg-card overflow-hidden ${
+              focused ? "border-primary shadow-glow/20" : "border-border"
+            }`}
+          >
+            <button className="flex items-center gap-1 px-4 h-[52px] text-foreground font-body font-600 text-[14px] border-r border-border bg-muted/30 flex-shrink-0">
+              🇮🇳 {countryCode}
+              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
             </button>
             <div className="flex-1 relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="tel"
                 placeholder="Phone number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="h-12 pl-10 rounded-xl border-border/50 bg-muted/50 text-foreground font-body focus:bg-background transition-colors"
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                className="h-[52px] border-0 bg-transparent text-foreground font-body font-600 text-[15px] placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 px-4"
                 maxLength={10}
               />
             </div>
@@ -83,12 +96,24 @@ const LoginScreen = () => {
           <Button
             onClick={handleSendOTP}
             disabled={phone.length < 10}
-            className="w-full gradient-primary text-primary-foreground font-display font-700 text-base rounded-2xl shadow-glow disabled:opacity-50 disabled:shadow-none transition-shadow"
+            className="w-full gradient-primary text-primary-foreground font-display font-700 text-[15px] rounded-2xl shadow-glow disabled:opacity-40 disabled:shadow-none transition-all duration-300 active:scale-[0.98]"
             style={{ height: 52 }}
           >
-            Send OTP
+            Continue
           </Button>
         </motion.div>
+
+        {/* Terms */}
+        <motion.p
+          className="text-center text-[11px] text-muted-foreground/70 mt-6 leading-relaxed font-body"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          By continuing, you agree to our{" "}
+          <span className="text-primary font-600">Terms of Service</span> and{" "}
+          <span className="text-primary font-600">Privacy Policy</span>
+        </motion.p>
       </div>
     </div>
   );

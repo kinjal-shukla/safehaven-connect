@@ -1,101 +1,106 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Sparkles, Heart } from "lucide-react";
+import { Shield, MapPin, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import welcomeImg from "@/assets/welcome-illustration.png";
+
+const features = [
+  { icon: Shield, title: "Instant SOS", desc: "One-tap emergency alert" },
+  { icon: MapPin, title: "Live Tracking", desc: "Share real-time location" },
+  { icon: Heart, title: "24/7 Support", desc: "Always here for you" },
+];
 
 const WelcomeScreen = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
-      {/* Decorative gradient blob top */}
-      <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-primary/10 blur-3xl" />
-      <div className="absolute -top-20 -left-20 w-48 h-48 rounded-full bg-accent/40 blur-3xl" />
+      {/* Ambient gradient */}
+      <div className="absolute top-0 right-0 w-[280px] h-[280px] rounded-full bg-primary/6 blur-[80px]" />
+      <div className="absolute bottom-32 left-0 w-[200px] h-[200px] rounded-full bg-accent/30 blur-[60px]" />
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 pt-12 pb-6 relative z-10">
-        {/* Illustration with glow */}
+      <div className="flex-1 flex flex-col px-6 pt-14 pb-8 relative z-10">
+        {/* Hero illustration */}
         <motion.div
-          className="relative mb-6"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, type: "spring" }}
-        >
-          <div className="absolute inset-0 rounded-full bg-primary/15 blur-3xl scale-110" />
-          <img
-            src={welcomeImg}
-            alt="Woman safety illustration"
-            className="w-56 h-56 object-contain relative z-10 drop-shadow-lg"
-          />
-        </motion.div>
-
-        {/* Text content */}
-        <motion.div
-          className="text-center"
+          className="flex justify-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-glow">
-              <Shield className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <h1 className="text-3xl font-display font-900 text-foreground tracking-tight">SafeShe</h1>
+          <div className="relative">
+            <div className="absolute inset-[-16px] rounded-full bg-primary/8 blur-2xl" />
+            <img
+              src={welcomeImg}
+              alt="Safety illustration"
+              className="w-48 h-48 object-contain relative z-10"
+            />
           </div>
-          <p className="text-muted-foreground text-sm leading-relaxed max-w-[280px] mx-auto">
-            Your personal safety companion. Stay protected with instant SOS alerts, live tracking, and emotional support.
+        </motion.div>
+
+        {/* Title */}
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h1 className="text-[28px] font-display font-900 text-foreground tracking-tight leading-tight">
+            Your Safety,{" "}
+            <span className="bg-clip-text text-transparent gradient-primary">First</span>
+          </h1>
+          <p className="text-muted-foreground text-[14px] mt-2.5 leading-relaxed max-w-[300px] mx-auto font-body font-500">
+            Stay protected with instant alerts, live tracking, and a supportive community.
           </p>
         </motion.div>
 
-        {/* Feature pills */}
+        {/* Feature cards — Uber-style horizontal list */}
         <motion.div
-          className="flex flex-wrap justify-center gap-2 mt-6"
-          initial={{ opacity: 0, y: 15 }}
+          className="space-y-2.5 mb-auto"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
+          transition={{ delay: 0.35 }}
         >
-          {[
-            { icon: Shield, text: "SOS Alerts" },
-            { icon: Sparkles, text: "AI Support" },
-            { icon: Heart, text: "24/7 Helpline" },
-          ].map((item) => (
-            <div
-              key={item.text}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass border border-primary/10 shadow-card"
+          {features.map((f, i) => (
+            <motion.div
+              key={f.title}
+              className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-card shadow-card border border-border/50"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 + i * 0.1 }}
             >
-              <item.icon className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-body font-600 text-foreground">{item.text}</span>
-            </div>
+              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-glow/30 flex-shrink-0">
+                <f.icon className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <p className="text-[13px] font-display font-700 text-foreground">{f.title}</p>
+                <p className="text-[11px] font-body font-500 text-muted-foreground">{f.desc}</p>
+              </div>
+            </motion.div>
           ))}
         </motion.div>
       </div>
 
-      {/* Bottom buttons */}
+      {/* Bottom CTAs */}
       <motion.div
-        className="px-8 pb-10 space-y-3 relative z-10"
-        initial={{ opacity: 0, y: 30 }}
+        className="px-6 pb-10 space-y-3 relative z-10"
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.55 }}
       >
         <Button
           onClick={() => navigate("/login")}
-          className="w-full h-13 gradient-primary text-primary-foreground font-display font-700 text-base rounded-2xl shadow-glow hover:shadow-sos transition-shadow duration-300"
+          className="w-full gradient-primary text-primary-foreground font-display font-700 text-[15px] rounded-2xl shadow-glow hover:shadow-elevated transition-all duration-300 active:scale-[0.98]"
           style={{ height: 52 }}
         >
           Get Started
         </Button>
-        <Button
+        <button
           onClick={() => navigate("/login")}
-          variant="outline"
-          className="w-full h-12 border-primary/30 text-primary font-display font-700 text-base rounded-2xl glass hover:bg-primary/5 transition-all duration-300"
+          className="w-full text-center text-[13px] font-body font-600 text-muted-foreground hover:text-foreground transition-colors py-2"
         >
-          I already have an account
-        </Button>
+          Already have an account? <span className="text-primary font-700">Log in</span>
+        </button>
       </motion.div>
-
-      {/* Decorative gradient blob bottom */}
-      <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-primary/8 blur-3xl" />
     </div>
   );
 };
