@@ -6,51 +6,55 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 340 20% 15%;
+    --background: 0 0% 99%;
+    --foreground: 220 20% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 340 20% 15%;
+    --card-foreground: 220 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 340 20% 15%;
+    --popover-foreground: 220 20% 12%;
 
-    --primary: 340 82% 55%;
+    --primary: 340 82% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 340 40% 95%;
-    --secondary-foreground: 340 82% 45%;
+    --secondary: 340 30% 96%;
+    --secondary-foreground: 340 60% 40%;
 
-    --muted: 340 20% 96%;
-    --muted-foreground: 340 10% 50%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
 
-    --accent: 340 60% 90%;
-    --accent-foreground: 340 82% 40%;
+    --accent: 340 45% 93%;
+    --accent-foreground: 340 70% 38%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 340 20% 90%;
-    --input: 340 20% 90%;
-    --ring: 340 82% 55%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 340 82% 52%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    /* Custom SafeShe tokens */
-    --sos: 0 85% 55%;
+    /* SafeShe premium tokens */
+    --sos: 0 78% 50%;
     --sos-foreground: 0 0% 100%;
-    --sos-glow: 0 85% 55%;
-    --primary-glow: 320 70% 60%;
-    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 55%), hsl(320, 70%, 60%));
-    --gradient-splash: linear-gradient(160deg, hsl(340, 82%, 52%), hsl(310, 65%, 45%), hsl(280, 50%, 40%));
-    --gradient-card: linear-gradient(135deg, hsl(340, 60%, 97%), hsl(320, 50%, 98%));
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
-    --gradient-hero: linear-gradient(180deg, hsl(340, 82%, 55%) 0%, hsl(320, 75%, 50%) 50%, hsl(300, 60%, 42%) 100%);
-    --shadow-card: 0 4px 20px -4px hsl(340 82% 55% / 0.12);
-    --shadow-sos: 0 8px 40px -8px hsl(0 85% 55% / 0.5);
-    --shadow-elevated: 0 8px 30px -8px hsl(340 20% 15% / 0.1);
-    --shadow-glow: 0 0 40px -8px hsl(340 82% 55% / 0.35);
-    --shadow-sos-glow: 0 0 60px -10px hsl(0 85% 55% / 0.6);
+    --sos-glow: 0 78% 50%;
+    --success: 152 69% 41%;
+    --success-foreground: 0 0% 100%;
+    --primary-glow: 320 65% 55%;
+    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 52%), hsl(320, 65%, 55%));
+    --gradient-splash: linear-gradient(160deg, hsl(340, 82%, 50%), hsl(310, 60%, 42%), hsl(280, 45%, 35%));
+    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100%), hsl(340, 30%, 98%));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+    --gradient-hero: linear-gradient(175deg, hsl(340, 82%, 52%) 0%, hsl(320, 70%, 46%) 50%, hsl(300, 55%, 38%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(340, 82%, 52%) 0%, hsl(15, 85%, 55%) 100%);
+    --shadow-card: 0 1px 3px hsl(220 20% 12% / 0.04), 0 4px 12px hsl(220 20% 12% / 0.06);
+    --shadow-sos: 0 8px 32px -6px hsl(0 78% 50% / 0.4);
+    --shadow-elevated: 0 4px 24px -4px hsl(220 20% 12% / 0.08), 0 1px 4px hsl(220 20% 12% / 0.04);
+    --shadow-glow: 0 4px 20px -4px hsl(340 82% 52% / 0.3);
+    --shadow-sos-glow: 0 0 50px -8px hsl(0 78% 50% / 0.5);
+    --shadow-soft: 0 2px 8px hsl(220 20% 12% / 0.04);
 
     --font-display: 'Nunito', sans-serif;
     --font-body: 'Quicksand', sans-serif;
@@ -72,12 +76,15 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
 }
 
@@ -94,6 +101,9 @@
   .gradient-hero {
     background: var(--gradient-hero);
   }
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
@@ -109,16 +119,25 @@
   .shadow-sos-glow {
     box-shadow: var(--shadow-sos-glow);
   }
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
   .glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
   }
   .glass-dark {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
