@@ -40,12 +40,17 @@
     --sos: 0 85% 55%;
     --sos-foreground: 0 0% 100%;
     --sos-glow: 0 85% 55%;
+    --primary-glow: 320 70% 60%;
     --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 55%), hsl(320, 70%, 60%));
-    --gradient-splash: linear-gradient(180deg, hsl(340, 82%, 55%), hsl(320, 75%, 45%));
-    --gradient-card: linear-gradient(135deg, hsl(340, 60%, 95%), hsl(320, 50%, 97%));
+    --gradient-splash: linear-gradient(160deg, hsl(340, 82%, 52%), hsl(310, 65%, 45%), hsl(280, 50%, 40%));
+    --gradient-card: linear-gradient(135deg, hsl(340, 60%, 97%), hsl(320, 50%, 98%));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+    --gradient-hero: linear-gradient(180deg, hsl(340, 82%, 55%) 0%, hsl(320, 75%, 50%) 50%, hsl(300, 60%, 42%) 100%);
     --shadow-card: 0 4px 20px -4px hsl(340 82% 55% / 0.12);
     --shadow-sos: 0 8px 40px -8px hsl(0 85% 55% / 0.5);
     --shadow-elevated: 0 8px 30px -8px hsl(340 20% 15% / 0.1);
+    --shadow-glow: 0 0 40px -8px hsl(340 82% 55% / 0.35);
+    --shadow-sos-glow: 0 0 60px -10px hsl(0 85% 55% / 0.6);
 
     --font-display: 'Nunito', sans-serif;
     --font-body: 'Quicksand', sans-serif;
@@ -86,6 +91,9 @@
   .gradient-card {
     background: var(--gradient-card);
   }
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
@@ -94,5 +102,23 @@
   }
   .shadow-elevated {
     box-shadow: var(--shadow-elevated);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-sos-glow {
+    box-shadow: var(--shadow-sos-glow);
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .glass-dark {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
